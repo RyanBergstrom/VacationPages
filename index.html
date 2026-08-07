@@ -20,10 +20,10 @@
             background-color: var(--bg-color);
             color: var(--text-main);
             margin: 0;
-            padding: 8px;
+            padding: 8px 8px env(safe-area-inset-bottom, 8px) 8px;
             display: flex;
             flex-direction: column;
-            height: 100vh;
+            height: 100dvh;
             box-sizing: border-box;
             overflow: hidden;
         }
@@ -40,19 +40,19 @@
 
         header {
             text-align: center;
-            padding: 4px 0;
+            padding: 2px 0;
             border-bottom: 1px solid #eee;
-            margin-bottom: 8px;
+            margin-bottom: 6px;
         }
 
         h1 {
-            font-size: 1.15rem;
+            font-size: 1.1rem;
             margin: 0 0 2px 0;
             color: var(--text-main);
         }
 
         .progress {
-            font-size: 0.8rem;
+            font-size: 0.75rem;
             color: #7f8c8d;
             font-weight: 600;
         }
@@ -69,16 +69,16 @@
             color: var(--accent);
             padding: 4px 10px;
             border-radius: 20px;
-            font-size: 0.8rem;
+            font-size: 0.75rem;
             font-weight: bold;
-            margin-bottom: 8px;
+            margin-bottom: 6px;
         }
 
         .fee {
-            font-size: 0.85rem;
+            font-size: 0.8rem;
             font-weight: bold;
             color: #e74c3c;
-            margin-bottom: 10px;
+            margin-bottom: 8px;
         }
 
         .map-btn {
@@ -88,39 +88,40 @@
             text-decoration: none;
             padding: 6px 12px;
             border-radius: 6px;
-            font-size: 0.85rem;
+            font-size: 0.8rem;
             font-weight: 600;
-            margin-bottom: 10px;
+            margin-bottom: 8px;
         }
 
         .section-title {
-            font-size: 0.8rem;
+            font-size: 0.75rem;
             font-weight: bold;
             color: #7f8c8d;
             text-transform: uppercase;
             letter-spacing: 0.5px;
-            margin-top: 10px;
+            margin-top: 8px;
             margin-bottom: 2px;
         }
 
         p {
-            line-height: 1.5;
-            font-size: 0.9rem;
+            line-height: 1.4;
+            font-size: 0.85rem;
             color: var(--text-muted);
             margin-top: 0;
-            margin-bottom: 10px;
+            margin-bottom: 8px;
         }
 
         .footer-nav {
-            padding-top: 8px;
+            padding-top: 6px;
             border-top: 1px solid #eee;
             background: #fff;
+            padding-bottom: 4px;
         }
 
         .nav-buttons {
             display: flex;
-            gap: 8px;
-            margin-bottom: 8px;
+            gap: 6px;
+            margin-bottom: 6px;
         }
 
         button.nav-btn {
@@ -128,9 +129,9 @@
             background-color: var(--accent);
             color: white;
             border: none;
-            padding: 12px;
+            padding: 10px;
             border-radius: 8px;
-            font-size: 0.95rem;
+            font-size: 0.9rem;
             font-weight: bold;
             cursor: pointer;
         }
@@ -141,10 +142,10 @@
 
         .jump-select {
             width: 100%;
-            padding: 8px;
+            padding: 6px;
             border-radius: 8px;
             border: 1px solid #ccc;
-            font-size: 0.85rem;
+            font-size: 0.8rem;
             background: #fff;
         }
     </style>
@@ -373,3 +374,4 @@
     </script>
 </body>
 </html>
+
