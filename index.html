@@ -1,366 +1,432 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-  <title>Munich Historical Walking Tour</title>
-  <style>
-    :root {
-      --primary: #1A365D;
-      --accent: #2B6CB0;
-      --bg: #F7FAFC;
-      --card-bg: #FFFFFF;
-      --text: #2D3748;
-      --vh: 1vh;
-    }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Munich Walking Tour</title>
+    <style>
+        :root {
+            --bg-color: #ffffff;
+            --card-bg: #ffffff;
+            --text-main: #2c3e50;
+            --text-muted: #444444;
+            --accent: #2980b9;
+            --accent-hover: #1f618d;
+            --transit-bg: #e8f4f8;
+        }
 
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
+        html, body {
+            height: 100%;
+            height: 100dvh;
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+        }
 
-    body {
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-      background-color: var(--bg);
-      color: var(--text);
-      display: flex;
-      flex-direction: column;
-      height: 100vh;
-      height: calc(var(--vh, 1vh) * 100);
-      overflow: hidden;
-    }
+        body {
+            padding: 6px 6px env(safe-area-inset-bottom, 6px) 6px;
+            display: flex;
+            flex-direction: column;
+            box-sizing: border-box;
+        }
 
-    header {
-      background-color: var(--primary);
-      color: white;
-      padding: 0.75rem 1rem;
-      text-align: center;
-      flex-shrink: 0;
-    }
+        .container {
+            width: 100%;
+            height: 100%;
+            background: var(--card-bg);
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            box-sizing: border-box;
+        }
 
-    header h1 {
-      font-size: 1.2rem;
-      font-weight: 600;
-    }
+        header {
+            text-align: center;
+            padding: 2px 0;
+            border-bottom: 1px solid #eee;
+            margin-bottom: 4px;
+            flex-shrink: 0;
+        }
 
-    .controls-bar {
-      background-color: #EDF2F7;
-      padding: 0.5rem 1rem;
-      display: flex;
-      justify-content: center;
-      border-bottom: 1px solid #E2E8F0;
-      flex-shrink: 0;
-    }
+        h1 {
+            font-size: 1.05rem;
+            margin: 0 0 2px 0;
+            color: var(--text-main);
+        }
 
-    select {
-      width: 100%;
-      max-width: 400px;
-      padding: 0.6rem;
-      font-size: 1rem;
-      border-radius: 6px;
-      border: 1px solid #CBD5E0;
-      background-color: white;
-      color: var(--text);
-    }
+        .progress {
+            font-size: 0.75rem;
+            color: #7f8c8d;
+            font-weight: 600;
+        }
 
-    main {
-      flex: 1;
-      overflow-y: auto;
-      padding: 1rem;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-    }
+        .card-content {
+            flex-grow: 1;
+            overflow-y: auto;
+            padding: 0 4px;
+            -webkit-overflow-scrolling: touch;
+        }
 
-    .card {
-      background: var(--card-bg);
-      border-radius: 12px;
-      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
-      width: 100%;
-      max-width: 600px;
-      overflow: hidden;
-      display: flex;
-      flex-direction: flex-col;
-      flex-direction: column;
-      margin-bottom: 1rem;
-    }
+        .stop-image {
+            width: 100%;
+            height: 160px;
+            object-fit: cover;
+            border-radius: 8px;
+            margin-bottom: 8px;
+            background-color: #ecf0f1;
+            display: block;
+        }
 
-    .image-container {
-      width: 100%;
-      height: 220px;
-      background-color: #E2E8F0;
-      position: relative;
-    }
+        .category-badge {
+            display: inline-block;
+            background: var(--transit-bg);
+            color: var(--accent);
+            padding: 3px 8px;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: bold;
+            margin-bottom: 4px;
+        }
 
-    .image-container img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      display: block;
-    }
+        .fee {
+            font-size: 0.8rem;
+            font-weight: bold;
+            color: #e74c3c;
+            margin-bottom: 6px;
+        }
 
-    .card-content {
-      padding: 1.25rem;
-    }
+        .map-btn {
+            display: inline-block;
+            background-color: #27ae60;
+            color: white;
+            text-decoration: none;
+            padding: 5px 10px;
+            border-radius: 6px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            margin-bottom: 6px;
+        }
 
-    .card-title {
-      font-size: 1.3rem;
-      color: var(--primary);
-      margin-bottom: 0.5rem;
-    }
+        .section-title {
+            font-size: 0.75rem;
+            font-weight: bold;
+            color: #7f8c8d;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-top: 6px;
+            margin-bottom: 2px;
+        }
 
-    .card-text {
-      font-size: 0.95rem;
-      line-height: 1.5;
-      color: #4A5568;
-      margin-bottom: 1rem;
-    }
+        p {
+            line-height: 1.35;
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            margin-top: 0;
+            margin-bottom: 6px;
+        }
 
-    .map-link {
-      display: inline-block;
-      color: var(--accent);
-      text-decoration: none;
-      font-weight: 600;
-      font-size: 0.9rem;
-    }
+        .footer-nav {
+            padding-top: 4px;
+            border-top: 1px solid #eee;
+            background: #fff;
+            flex-shrink: 0;
+        }
 
-    .nav-footer {
-      background: white;
-      border-top: 1px solid #E2E8F0;
-      padding: 0.75rem 1rem;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      flex-shrink: 0;
-    }
+        .nav-buttons {
+            display: flex;
+            gap: 6px;
+            margin-bottom: 4px;
+        }
 
-    .nav-btn {
-      background-color: var(--accent);
-      color: white;
-      border: none;
-      padding: 0.8rem 1.5rem;
-      font-size: 1rem;
-      font-weight: 600;
-      border-radius: 8px;
-      min-height: 48px;
-      min-width: 100px;
-      cursor: pointer;
-    }
+        button.nav-btn {
+            flex: 1;
+            background-color: var(--accent);
+            color: white;
+            border: none;
+            padding: 16px;
+            border-radius: 8px;
+            font-size: 1.05rem;
+            font-weight: bold;
+            cursor: pointer;
+        }
 
-    .nav-btn:disabled {
-      background-color: #CBD5E0;
-      cursor: not-allowed;
-    }
+        button.nav-btn:disabled {
+            background-color: #bdc3c7;
+        }
 
-    .progress {
-      font-size: 0.95rem;
-      font-weight: 600;
-      color: #718096;
-    }
-  </style>
+        .jump-select {
+            width: 100%;
+            padding: 8px;
+            border-radius: 6px;
+            border: 1px solid #ccc;
+            font-size: 0.85rem;
+            background: #fff;
+        }
+    </style>
 </head>
 <body>
 
-  <header>
-    <h1>Munich Walking Tour</h1>
-  </header>
+    <div class="container">
+        <header>
+            <h1 id="tour-title">Munich Walking Tour</h1>
+            <div class="progress" id="progress-indicator">Stop 1 of 17</div>
+        </header>
 
-  <div class="controls-bar">
-    <select id="stopSelect" onchange="jumpToStop(parseInt(this.value))"></select>
-  </div>
+        <div class="card-content" id="card-body">
+            <!-- Dynamic content -->
+        </div>
 
-  <main>
-    <div class="card">
-      <div class="image-container">
-        <img id="stopImage" src="" alt="Stop Image" onerror="handleImageError(this)">
-      </div>
-      <div class="card-content">
-        <h2 id="stopTitle" class="card-title"></h2>
-        <p id="stopDescription" class="card-text"></p>
-        <a id="mapLink" class="map-link" href="#" target="_blank" rel="noopener">Open in Google Maps &rarr;</a>
-      </div>
+        <div class="footer-nav">
+            <div class="nav-buttons">
+                <button class="nav-btn" id="prev-btn" onclick="changeStop(-1)">← Prev</button>
+                <button class="nav-btn" id="next-btn" onclick="changeStop(1)">Next →</button>
+            </div>
+            <select class="jump-select" id="jump-dropdown" onchange="jumpToStop(this.value)">
+                <!-- Options populated dynamically -->
+            </select>
+        </div>
     </div>
-  </main>
 
-  <footer class="nav-footer">
-    <button id="prevBtn" class="nav-btn" onclick="navigate(-1)">Previous</button>
-    <span id="progressIndicator" class="progress">1 / 17</span>
-    <button id="nextBtn" class="nav-btn" onclick="navigate(1)">Next</button>
-  </footer>
+    <script>
+        const tourStops = [
+            {
+                title: "Outbound Transit",
+                category: "Transit 🚆",
+                fee: "Fee: €4.20 Single / €9.90 Day Pass (Zone M)",
+                mapLink: "",
+                image: "https://upload.wikimedia.org/wikipedia/commons/thumb/8/8f/MVV_S-Bahn_M%C3%BCnchen_Baureihe_423_Marienplatz.jpg/800px-MVV_S-Bahn_M%C3%BCnchen_Baureihe_423_Marienplatz.jpg",
+                history: "Walk south down Freseniusstraße, turning onto Verdistraße to reach the S-Bahn path (6–8 mins). Enter München-Obermenzing S-Bahn Station and take the eastbound S2 S-Bahn. Ride 5 stops (12 mins) and exit at München Marienplatz.",
+                next: ""
+            },
+            {
+                title: "Stop 1: Marienplatz",
+                category: "Third Reich 🏛️",
+                fee: "Fee: FREE",
+                mapLink: "https://maps.google.com/?q=Marienplatz,+Munich",
+                image: "https://upload.wikimedia.org/wikipedia/commons/thumb/c/c8/M%C3%BCnchen_-_Neues_Rathaus_vom_Alten_Peter_gesehen.jpg/800px-M%C3%BCnchen_-_Neues_Rathaus_vom_Alten_Peter_gesehen.jpg",
+                history: "Marienplatz has been the beating heart of Munich since 1158. Dominated by the stunning Gothic Revival Neues Rathaus (New Town Hall), the square was historically a civic gathering space that transformed into a volatile political arena in the 1920s. Rival paramilitary groups frequently clashed here. Following Hitler’s rise to power in 1933, the Nazi regime co-opted the square for massive state parades, military rallies, and propaganda displays, draping the Town Hall in swastika banners to reinforce Munich’s status as the 'Capital of the Movement.' The square suffered immense devastation during Allied bombing raids in World War II but was meticulously rebuilt. Today, it remains the central starting point for exploring the city's layered history.",
+                next: "Walk east across the square under the Old Town Hall archway onto Tal for 200m, then right onto Sterneckerstraße."
+            },
+            {
+                title: "Stop 2: Sterneckerbräu",
+                category: "Third Reich 🏛️",
+                fee: "Fee: FREE (Exterior View)",
+                mapLink: "https://maps.google.com/?q=Sterneckerbräu,+Munich",
+                image: "https://upload.wikimedia.org/wikipedia/commons/thumb/3/36/Sterneckerbr%C3%A4u_Munich_2013.jpg/800px-Sterneckerbr%C3%A4u_Munich_2013.jpg",
+                history: "Located just off the main square, the Sterneckerbräu building is the ultimate birthplace of the Nazi Party. Originally a traditional Bavarian tavern, its back rooms hosted meetings for radical fringe groups in post-WWI Munich. In September 1919, Adolf Hitler—then a military informant—was sent here to monitor the German Workers' Party (DAP). Impressed by his aggressive debating skills, the founders invited him to join. By early 1920, the building housed the party's first permanent, windowless office where the 25-Point Program was drafted and the NSDAP was officially formed. During the Third Reich, Hitler declared the room a protected national monument and a site of party pilgrimage. Post-war, all Nazi insignia was dismantled, and it is now a standard commercial space.",
+                next: "Walk back west along Tal for 200m to the Old Town Hall tower."
+            },
+            {
+                title: "Stop 3: Toy Museum (Altes Rathaus)",
+                category: "Third Reich 🏛️",
+                fee: "Fee: €8.00 Adults / €3.00 Children",
+                mapLink: "https://maps.google.com/?q=Altes+Rathaus,+Munich",
+                image: "https://upload.wikimedia.org/wikipedia/commons/thumb/e/e5/Altes_Rathaus_M%C3%BCnchen_02.jpg/800px-Altes_Rathaus_M%C3%BCnchen_02.jpg",
+                history: "The Altes Rathaus (Old Town Hall) is a 15th-century medieval masterpiece, but its modern history is exceptionally dark. On the night of November 9, 1938, senior Nazi Party leaders gathered in its grand hall for an annual commemorative dinner. During this event, Propaganda Minister Joseph Goebbels delivered a virulent anti-Semitic speech. He explicitly signaled that the police would not intervene if violence broke out against Jewish citizens. This speech acted as the official catalyst for Kristallnacht (the Night of Broken Glass). Following his address, party leaders rushed to the hall's telephones to coordinate mob violence and mass deportations across the Reich. Rebuilt after severe WWII bombing, the tower now ironically houses a cheerful historic Toy Museum.",
+                next: "Walk east on Sparkassenstraße, right on Ledererstraße, then left on Platzl."
+            },
+            {
+                title: "Stop 4: Hofbräuhaus München",
+                category: "Third Reich 🏛️",
+                fee: "Fee: FREE to enter",
+                mapLink: "https://maps.google.com/?q=Hofbräuhaus+München",
+                image: "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b5/Hofbr%C3%A4uhaus_am_Platzl_M%C3%BCnchen_04.jpg/800px-Hofbr%C3%A4uhaus_am_Platzl_M%C3%BCnchen_04.jpg",
+                history: "Founded in 1589, the Hofbräuhaus is the world’s most famous beer hall, but it was also a primary incubator for early Nazi agitation. On February 24, 1920, Adolf Hitler took the stage in the first-floor Festsaal before a crowd of 2,000 people to publicly announce the party’s 25-Point Program, demanding the revocation of the Versailles Treaty and denying citizenship to Jews. The massive ground-floor beer hall (Schwemme) was later the site of the infamous 1921 Saalschlacht (Hall Battle), a massive, bloody brawl between the SA and political opponents. After seizing power, Hitler returned here every February to deliver anniversary speeches to party veterans. Heavily damaged during WWII, it was perfectly reconstructed and remains a lively traditional tavern today.",
+                next: "Walk south out of Platzl via Münzstraße and Sparkassenstraße to the hill behind Marienplatz."
+            },
+            {
+                title: "Stop 5: St. Peter's Church",
+                category: "General Sightseeing 🌟",
+                fee: "Fee: Tower Climb €5.00",
+                mapLink: "https://maps.google.com/?q=St.+Peter's+Church,+Munich",
+                image: "https://upload.wikimedia.org/wikipedia/commons/thumb/e/e2/St._Peter_%28Munich%29_-_tower_view_east.jpg/800px-St._Peter_%28Munich%29_-_tower_view_east.jpg",
+                history: "Affectionately known as Alter Peter (Old Peter), St. Peter’s is the oldest recorded parish church in Munich, pre-dating the city's official founding. Rebuilt in a gorgeous Gothic style after a 1327 fire, its interior features incredible Rococo stucco work and the fascinating, jewel-encrusted skeleton of St. Munditia. However, the real draw is the 91-meter tower. Climbing its 306 steps rewards you with the best elevated, panoramic view in the entire city, looking directly down onto Marienplatz and stretching out toward the Alps. Almost entirely destroyed during WWII, the church was slated for demolition until resilient Munich citizens organized a massive grassroots fundraising effort to save and meticulously reconstruct it.",
+                next: "Walk 50m south directly down the steps into the open market square."
+            },
+            {
+                title: "Stop 6: Viktualienmarkt",
+                category: "General Sightseeing 🌟",
+                fee: "Fee: FREE",
+                mapLink: "https://maps.google.com/?q=Viktualienmarkt,+Munich",
+                image: "https://upload.wikimedia.org/wikipedia/commons/thumb/7/7b/Viktualienmarkt_Munich_July_2013_02.jpg/800px-Viktualienmarkt_Munich_July_2013_02.jpg",
+                history: "Just steps from Marienplatz, the Viktualienmarkt is Munich's premier open-air food market. Established in 1807 by King Maximilian I Joseph when the original town square market grew too small, it has evolved into a sprawling 22,000-square-meter culinary hub. Over 140 stalls offer everything from traditional Bavarian sausages and artisan cheeses to exotic fruits and fresh flowers. The heart of the market is its unique, shaded central beer garden, where Munich's six major breweries rotate supplying the draft beer. It’s the perfect place to grab a quick snack from a vendor and sit under the chestnut trees beside the traditional hand-painted Maypole, celebrating the city's rich historical trades and brewing heritage.",
+                next: "Walk north across Marienplatz, west on Kaufingerstraße, right on Liebfrauenstraße."
+            },
+            {
+                title: "Stop 7: Frauenkirche",
+                category: "General Sightseeing 🌟",
+                fee: "Fee: Tower Elevator €7.50",
+                mapLink: "https://maps.google.com/?q=Frauenkirche,+Munich",
+                image: "https://upload.wikimedia.org/wikipedia/commons/thumb/7/7e/M%C3%BCnchen_-_Frauenkirche_von_S%C3%BCdosten.jpg/800px-M%C3%BCnchen_-_Frauenkirche_von_S%C3%BCdosten.jpg",
+                history: "The Dom zu Unserer Lieben Frau (Frauenkirche) is the undisputed visual symbol of Munich. Constructed in a rapid twenty years between 1468 and 1488, this massive red-brick Late Gothic cathedral is famous for its 99-meter twin towers topped with distinctive green copper Renaissance domes. A strict city ordinance ensures no modern building in the center can eclipse them. Inside, the cavernous nave is deceivingly bright. Look for the 'Devil's Footstep' (Teufelstritt) near the entrance—a dark footprint in the floor where legend says the Devil stomped his foot in anger. You can also view the ornate tombs of Bavarian monarchs in the crypt, or take the elevator up the South Tower for sweeping city views.",
+                next: "Walk north on Augustinerstraße and Schäfflerstraße, then north up Theatinerstraße to Odeonsplatz."
+            },
+            {
+                title: "Stop 8: Feldherrnhalle",
+                category: "Third Reich 🏛️",
+                fee: "Fee: FREE",
+                mapLink: "https://maps.google.com/?q=Feldherrnhalle,+Munich",
+                image: "https://upload.wikimedia.org/wikipedia/commons/thumb/0/07/Feldherrnhalle_Munich_May_2006.jpg/800px-Feldherrnhalle_Munich_May_2006.jpg",
+                history: "Built in the 1840s to honor Bavarian military leaders, this grand open-air loggia at Odeonsplatz became the violent endpoint of Hitler's 1923 Beer Hall Putsch. On November 9, armed Nazi paramilitaries marching toward the War Ministry were intercepted by state police right here. A brief gun battle ensued, killing four police officers and sixteen marchers, temporarily halting Hitler's rise. When the Nazis took power in 1933, they transformed the loggia into a sacred national shrine. A massive bronze memorial was installed to honor the fallen marchers, flanked by armed SS guards. Every passing citizen was legally forced to perform the Nazi salute. The U.S. military permanently removed all Nazi monuments from the site in 1945.",
+                next: "Walk 20m behind the western side of the monument into the narrow alley."
+            },
+            {
+                title: "Stop 9: Viscardigasse",
+                category: "Third Reich 🏛️",
+                fee: "Fee: FREE",
+                mapLink: "https://maps.google.com/?q=Viscardigasse,+Munich",
+                image: "https://upload.wikimedia.org/wikipedia/commons/thumb/2/23/Viscardigasse_M%C3%BCnchen.jpg/800px-Viscardigasse_M%C3%BCnchen.jpg",
+                history: "Running directly behind the Feldherrnhalle, this narrow pedestrian alleyway became famous as Drückebergergasse ('Shirker's Alley'). Because Nazi law demanded that everyone walking past the front of the Feldherrnhalle execute the 'Heil Hitler' salute toward the SS guards and memorial plaque, citizens who opposed the regime found a clever workaround. They would intentionally turn down this quiet side street, bypassing the monument entirely and avoiding the forced ideological ritual. In 1995, the city of Munich embedded a winding trail of gold-painted bronze cobblestones into the pavement along the exact detour route. Tracing this path today serves as a permanent, moving tribute to the quiet, everyday acts of passive civil resistance by Munich's residents.",
+                next: "Walk east out of the alley toward the large palace courtyard."
+            },
+            {
+                title: "Stop 10: Residenz & Hofgarten",
+                category: "General Sightseeing 🌟",
+                fee: "Fee: Palace Museum €10.00",
+                mapLink: "https://maps.google.com/?q=Münchner+Residenz",
+                image: "https://upload.wikimedia.org/wikipedia/commons/thumb/9/91/M%C3%BCnchner_Residenz_-_Fassade_Residenzstr.jpg/800px-M%C3%BCnchner_Residenz_-_Fassade_Residenzstr.jpg",
+                history: "The Münchner Residenz is the colossal former royal palace of the Wittelsbach monarchs, who ruled Bavaria from 1508 to 1918. As the largest city palace in Germany, it spans 13 courtyards and blends Renaissance, Baroque, and Neoclassical architecture. Key highlights include the breathtaking Antiquarium (a massive Renaissance vaulted hall) and the Royal Treasury. Directly attached to the northern wing is the Hofgarten, a perfectly manicured 17th-century Italian Renaissance court garden. Centered around the domed Temple of Diana pavilion—where local musicians often play classical acoustics—the garden offers a peaceful, scenic retreat right in the middle of the bustling city, perfect for a quick walking break before heading into the Maxvorstadt museum district.",
+                next: "Walk west across Odeonsplatz and down Brienner Straße for 200m."
+            },
+            {
+                title: "Stop 11: Platz der Opfer des Nationalsozialismus",
+                category: "Third Reich 🏛️",
+                fee: "Fee: FREE",
+                mapLink: "https://maps.google.com/?q=Platz+der+Opfer+des+Nationalsozialismus",
+                image: "https://upload.wikimedia.org/wikipedia/commons/thumb/c/cf/Ehrenmal_f%C3%BCr_die_Opfer_des_Nationalsozialismus_%28M%C3%BCnchen%29.jpg/800px-Ehrenmal_f%C3%BCr_die_Opfer_des_Nationalsozialismus_%28M%C3%BCnchen%29.jpg",
+                history: "Dedicated in 1946, the 'Square for the Victims of National Socialism' honors all groups persecuted and murdered by the regime. The central monument features a black steel mesh cage housing an eternal flame, symbolizing continuous vigilance against tyranny. This specific location is highly significant because it sits immediately adjacent to the former site of the Wittelsbacher Palais. During the Third Reich, that palace served as the ruthless Gestapo headquarters for Munich and Upper Bavaria. Its basement vaults were used to torture political dissidents, including members of the famous White Rose student resistance group like Sophie and Hans Scholl. The Gestapo headquarters was destroyed by bombs in 1944, leaving this memorial in its wake.",
+                next: "Continue west on Brienner Straße for 500m, right on Arcisstraße."
+            },
+            {
+                title: "Stop 12: NS-Dokumentationszentrum",
+                category: "Third Reich 🏛️",
+                fee: "Fee: FREE",
+                mapLink: "https://maps.google.com/?q=NS-Dokumentationszentrum+München",
+                image: "https://upload.wikimedia.org/wikipedia/commons/thumb/2/2f/NS-Dokumentationszentrum_M%C3%BCnchen_2015.jpg/800px-NS-Dokumentationszentrum_M%C3%BCnchen_2015.jpg",
+                history: "This modern white concrete cube is Munich’s premier research institution examining the city's role as the birthplace of the Nazi movement. It was deliberately built on the exact, cleared foundations of the Braunes Haus (Brown House). Purchased in 1930, the Brown House served as the heavily guarded national headquarters of the Nazi Party, featuring Hitler’s executive office and the national leadership council hall. The building was destroyed during WWII, and the lot remained an empty lawn for decades to prevent neo-Nazi pilgrimages. Today, the Documentation Center offers four floors of state-of-the-art, free exhibitions using historical documents and photographs to trace the regime's rise, the complicity of civic institutions, and the horrors of the Holocaust.",
+                next: "Walk directly across the street to the twin stone building."
+            },
+            {
+                title: "Stop 13: Führerbau",
+                category: "Third Reich 🏛️",
+                fee: "Fee: FREE (Lobby View)",
+                mapLink: "https://maps.google.com/?q=Führerbau,+Arcisstraße,+Munich",
+                image: "https://upload.wikimedia.org/wikipedia/commons/thumb/8/89/Mischpoke_F%C3%BChrerbau.jpg/800px-Mischpoke_F%C3%BChrerbau.jpg",
+                history: "Located right across the street, the Führerbau (Leader's Building) is one of the most prominent surviving pieces of official Nazi state architecture. Completed in 1937, this imposing Neoclassical structure served as Hitler’s primary diplomatic headquarters. It was inside Hitler's first-floor office here that the infamous Munich Agreement was signed in September 1938, where Britain and France appeased Hitler by ceding Czechoslovakian territory. During WWII, the building stored thousands of pieces of priceless art looted by the Nazis from across Europe. After the U.S. Army liberated Munich, the 'Monuments Men' used this exact building as a central collection point to process and return the stolen art. It is now a public university of music.",
+                next: "Walk 100m south down Arcisstraße to the large open plaza."
+            },
+            {
+                title: "Stop 14: Königsplatz",
+                category: "Third Reich 🏛️",
+                fee: "Fee: FREE",
+                mapLink: "https://maps.google.com/?q=Königsplatz,+Munich",
+                image: "https://upload.wikimedia.org/wikipedia/commons/thumb/9/91/M%C3%BCnchen_K%C3%B6nigsplatz_Glyptothek_Propyl%C3%A4en_Antikensammlung.jpg/800px-M%C3%BCnchen_K%C3%B6nigsplatz_Glyptothek_Propyl%C3%A4en_Antikensammlung.jpg",
+                history: "Designed in the 19th century as an 'Athens on the Isar,' this massive plaza of Neoclassical museums was completely re-engineered by the Nazis into a stark, granite-paved parade ground for massive SS and SA rallies. On May 10, 1933, Königsplatz was the site of the notorious Nazi Book Burnings, where students threw thousands of works by Jewish, socialist, and pacifist authors into a massive bonfire. The regime also constructed two massive 'Temples of Honor' here to hold the remains of the 1923 putsch marchers. In 1947, the U.S. military blew up these temples with explosives; their overgrown foundations are still visible nearby. The city eventually ripped up the Nazi granite and restored the historic green lawns.",
+                next: "Walk east back through Odeonsplatz and exit onto Prinzregentenstraße (15 mins)."
+            },
+            {
+                title: "Stop 15: Eisbachwelle",
+                category: "General Sightseeing 🌟",
+                fee: "Fee: FREE",
+                mapLink: "https://maps.google.com/?q=Eisbachwelle,+Munich",
+                image: "https://upload.wikimedia.org/wikipedia/commons/thumb/7/76/Eisbachwelle_Munich_2019.jpg/800px-Eisbachwelle_Munich_2019.jpg",
+                history: "Located at the edge of the sprawling English Garden park, the Eisbachwelle is the world’s most famous urban river surfing spot. The man-made Eisbach river rushes out from an underground tunnel and hits a submerged concrete ledge, creating a permanent, one-meter-high standing wave. Experienced surfers from around the world ride this wave 24 hours a day, 365 days a year—even wearing thick wetsuits during Munich’s freezing winters. Visitors can stand right on the bridge above for an incredibly close view of the action. The wave sits directly next to the Haus der Kunst, a massive museum originally built by the Nazi regime in 1937 as the ultimate showcase for state-approved 'Aryan' art.",
+                next: "Walk 300m south to the Lehel U-Bahn station."
+            },
+            {
+                title: "Return Transit",
+                category: "Transit 🚆",
+                fee: "Fee: Covered by Day Pass",
+                mapLink: "",
+                image: "https://upload.wikimedia.org/wikipedia/commons/thumb/8/8f/MVV_S-Bahn_M%C3%BCnchen_Baureihe_423_Marienplatz.jpg/800px-MVV_S-Bahn_M%C3%BCnchen_Baureihe_423_Marienplatz.jpg",
+                history: "Enter U-Bahn station Lehel and take the U4/U5 line west for 1 or 2 stops to Marienplatz or Karlsplatz (Stachus). Transfer to the westbound S2 S-Bahn (Direction: Dachau/Petershausen). Ride 5 stops to München-Obermenzing. Walk north on Verdistraße and left onto Freseniusstraße back to your start",
+                next: ""
+            }
+        ];
 
-  <script>
-    const stops = [
-      {
-        title: "1. Marienplatz",
-        desc: "The central square in the city center since 1158, dominated by the New Town Hall (Neues Rathaus).",
-        image: "images/marienplatz.jpg",
-        map: "https://maps.google.com/?q=Marienplatz+Munich"
-      },
-      {
-        title: "2. Frauenkirche",
-        desc: "The Cathedral of Our Dear Lady, a landmark church with twin 99-meter towers dominating the Munich skyline.",
-        image: "images/frauenkirche.jpg",
-        map: "https://maps.google.com/?q=Frauenkirche+Munich"
-      },
-      {
-        title: "3. Odeonsplatz",
-        desc: "A large square developed in the early 19th century, site of the Feldherrnhalle and the 1923 Beer Hall Putsch collision.",
-        image: "images/odeonsplatz.jpg",
-        map: "https://maps.google.com/?q=Odeonsplatz+Munich"
-      },
-      {
-        title: "4. Feldherrnhalle",
-        desc: "A monumental loggia on Odeonsplatz built to honor the Bavarian army.",
-        image: "images/feldherrnhalle.jpg",
-        map: "https://maps.google.com/?q=Feldherrnhalle+Munich"
-      },
-      {
-        title: "5. Viscardigasse (Drückebergergasse)",
-        desc: "Alley behind the Feldherrnhalle used by locals to bypass giving the mandatory Nazi salute during WWII.",
-        image: "images/viscardigasse.jpg",
-        map: "https://maps.google.com/?q=Viscardigasse+Munich"
-      },
-      {
-        title: "6. Munich Residenz",
-        desc: "Former royal palace of the Wittelsbach monarchs of Bavaria, the largest city palace in Germany.",
-        image: "images/residenz.jpg",
-        map: "https://maps.google.com/?q=Munich+Residenz"
-      },
-      {
-        title: "7. Hofgarten",
-        desc: "A Renaissance garden built in the early 17th century, located opposite the Residenz.",
-        image: "images/hofgarten.jpg",
-        map: "https://maps.google.com/?q=Hofgarten+Munich"
-      },
-      {
-        title: "8. Hofbräuhaus",
-        desc: "Historic 16th-century beer hall where early political gatherings took place.",
-        image: "images/hofbrauhaus.jpg",
-        map: "https://maps.google.com/?q=Hofbrauhaus+Munich"
-      },
-      {
-        title: "9. Viktualienmarkt",
-        desc: "A daily open-air food market and square in the center of Munich.",
-        image: "images/viktualienmarkt.jpg",
-        map: "https://maps.google.com/?q=Viktualienmarkt+Munich"
-      },
-      {
-        title: "10. St. Peter's Church (Alter Peter)",
-        desc: "Munich's oldest parish church, offering panoramic views of the city from its tower.",
-        image: "images/alter_peter.jpg",
-        map: "https://maps.google.com/?q=St.+Peter's+Church+Munich"
-      },
-      {
-        title: "11. Karlsplatz (Stachus)",
-        desc: "A prominent town square marked by the historic Karlstor gatehouse.",
-        image: "images/karlsplatz.jpg",
-        map: "https://maps.google.com/?q=Karlsplatz+Munich"
-      },
-      {
-        title: "12. Königsplatz",
-        desc: "A neoclassical square used for mass rallies during the National Socialist era.",
-        image: "images/koenigsplatz.jpg",
-        map: "https://maps.google.com/?q=Koenigsplatz+Munich"
-      },
-      {
-        title: "13. NS Documentation Center",
-        desc: "Museum focusing on the history and consequences of the National Socialist regime in Munich.",
-        image: "images/ns_doc.jpg",
-        map: "https://maps.google.com/?q=NS+Documentation+Center+Munich"
-      },
-      {
-        title: "14. Führerbau",
-        desc: "The historic building where the 1938 Munich Agreement was signed, now a music school.",
-        image: "images/fuehrerbau.jpg",
-        map: "https://maps.google.com/?q=Fuehrerbau+Munich"
-      },
-      {
-        title: "15. White Rose Memorial (Geschwister-Scholl-Platz)",
-        desc: "Memorial in front of LMU honoring the anti-Nazi resistance group, featuring bronze flyers embedded in the pavement.",
-        image: "images/white_rose.jpg",
-        map: "https://maps.google.com/?q=Geschwister-Scholl-Platz+Munich"
-      },
-      {
-        title: "16. Georg Elser Memorial",
-        desc: "Light sculpture memorial honoring Georg Elser, who attempted to assassinate Hitler in 1939.",
-        image: "images/georg_elser.jpg",
-        map: "https://maps.google.com/?q=Georg+Elser+Memorial+Munich"
-      },
-      {
-        title: "17. Englischer Garten & Eisbachwelle",
-        desc: "Large urban park featuring a continuous standing wave on the Eisbach river popular with surfers.",
-        image: "images/eisbachwelle.jpg",
-        map: "https://maps.google.com/?q=Eisbachwelle+Munich"
-      }
-    ];
+        let currentIndex = 0;
 
-    let currentStop = 0;
+        function handleImageError(img, title) {
+            img.onerror = null;
+            const svgFallback = `
+                <svg xmlns="http://www.w3.org/2000/svg" width="600" height="400" viewBox="0 0 600 400">
+                    <rect width="100%" height="100%" fill="#ecf0f1"/>
+                    <path d="M260 170 L300 130 L340 170 L380 120 L440 200 L160 200 Z" fill="#bdc3c7"/>
+                    <circle cx="230" cy="130" r="20" fill="#bdc3c7"/>
+                    <text x="50%" y="75%" dominant-baseline="middle" text-anchor="middle" font-family="sans-serif" font-size="16" font-weight="bold" fill="#7f8c8d">
+                        ${title} (Image Loading)
+                    </text>
+                </svg>
+            `;
+            img.src = 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(svgFallback);
+        }
 
-    function setViewportHeight() {
-      let vh = window.innerHeight * 0.01;
-      document.documentElement.style.setProperty('--vh', `${vh}px`);
-    }
-    window.addEventListener('resize', setViewportHeight);
-    setViewportHeight();
+        function renderStop(index) {
+            const stop = tourStops[index];
+            const cardBody = document.getElementById("card-body");
+            const progressIndicator = document.getElementById("progress-indicator");
+            const prevBtn = document.getElementById("prev-btn");
+            const nextBtn = document.getElementById("next-btn");
 
-    function initTour() {
-      const select = document.getElementById('stopSelect');
-      stops.forEach((stop, idx) => {
-        const option = document.createElement('option');
-        option.value = idx;
-        option.textContent = stop.title;
-        select.appendChild(option);
-      });
-      renderStop();
-    }
+            progressIndicator.innerText = `Stop ${index + 1} of ${tourStops.length}`;
+            document.getElementById("tour-title").innerText = stop.title;
 
-    function renderStop() {
-      const stop = stops[currentStop];
-      document.getElementById('stopTitle').innerText = stop.title;
-      document.getElementById('stopDescription').innerText = stop.desc;
-      
-      const imgElement = document.getElementById('stopImage');
-      imgElement.src = stop.image;
-      imgElement.alt = stop.title;
+            let imageHTML = "";
+            if (stop.image) {
+                const safeTitle = stop.title.replace(/'/g, "\\'");
+                imageHTML = `<img src="${stop.image}" alt="${stop.title}" class="stop-image" onerror="handleImageError(this, '${safeTitle}')">`;
+            }
 
-      document.getElementById('mapLink').href = stop.map;
-      document.getElementById('stopSelect').value = currentStop;
-      document.getElementById('progressIndicator').innerText = `${currentStop + 1} / ${stops.length}`;
+            let mapButtonHTML = "";
+            if (stop.mapLink) {
+                mapButtonHTML = `<a href="${stop.mapLink}" target="_blank" class="map-btn">Open in Maps 🗺️</a><br>`;
+            }
 
-      document.getElementById('prevBtn').disabled = currentStop === 0;
-      document.getElementById('nextBtn').disabled = currentStop === stops.length - 1;
-    }
+            let nextSectionHTML = "";
+            if (stop.next) {
+                nextSectionHTML = `<div class="section-title">Next Directions</div><p>${stop.next}</p>`;
+            }
 
-    function navigate(direction) {
-      currentStop += direction;
-      if (currentStop < 0) currentStop = 0;
-      if (currentStop >= stops.length) currentStop = stops.length - 1;
-      renderStop();
-    }
+            cardBody.innerHTML = `
+                ${imageHTML}
+                <div class="category-badge">${stop.category}</div>
+                <div class="fee">${stop.fee}</div>
+                ${mapButtonHTML}
+                <div class="section-title">History</div>
+                <p>${stop.history}</p>
+                ${nextSectionHTML}
+            `;
 
-    function jumpToStop(index) {
-      currentStop = index;
-      renderStop();
-    }
+            prevBtn.disabled = index === 0;
+            nextBtn.disabled = index === tourStops.length - 1;
+            document.getElementById("jump-dropdown").value = index;
+            cardBody.scrollTop = 0;
+        }
 
-    function handleImageError(img) {
-      img.onerror = null;
-      const title = stops[currentStop]?.title || 'Location';
-      const svg = `
-        <svg xmlns="http://www.w3.org/2000/svg" width="600" height="400" viewBox="0 0 600 400">
-          <rect width="100%" height="100%" fill="#EDF2F7"/>
-          <path d="M260 170 L300 130 L340 170 L380 120 L440 200 L160 200 Z" fill="#CBD5E0"/>
-          <circle cx="230" cy="130" r="20" fill="#CBD5E0"/>
-          <text x="50%" y="75%" dominant-baseline="middle" text-anchor="middle" font-family="sans-serif" font-size="16" fill="#718096">
-            ${title} (Image Unavailable)
-          </text>
-        </svg>
-      `;
-      img.src = 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(svg);
-    }
+        function changeStop(direction) {
+            currentIndex += direction;
+            if (currentIndex < 0) currentIndex = 0;
+            if (currentIndex >= tourStops.length) currentIndex = tourStops.length - 1;
+            renderStop(currentIndex);
+        }
 
-    window.onload = initTour;
-  </script>
+        function jumpToStop(index) {
+            currentIndex = parseInt(index);
+            renderStop(currentIndex);
+        }
+
+        const dropdown = document.getElementById("jump-dropdown");
+        tourStops.forEach((stop, i) => {
+            const option = document.createElement("option");
+            option.value = i;
+            option.innerText = `${i + 1}. ${stop.title}`;
+            dropdown.appendChild(option);
+        });
+
+        renderStop(currentIndex);
+    </script>
 </body>
 </html>
