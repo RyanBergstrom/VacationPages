@@ -3,14 +3,14 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-  <title>Vacation Pages</title>
+  <title>Munich Historical Walking Tour</title>
   <style>
     :root {
-      --primary-color: #1A365D;
-      --secondary-color: #2B6CB0;
-      --background-color: #F7FAFC;
+      --primary: #1A365D;
+      --accent: #2B6CB0;
+      --bg: #F7FAFC;
       --card-bg: #FFFFFF;
-      --text-color: #2D3748;
+      --text: #2D3748;
       --vh: 1vh;
     }
 
@@ -21,146 +21,282 @@
     }
 
     body {
-      font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-      background-color: var(--background-color);
-      color: var(--text-color);
-      min-height: 100vh;
-      min-height: calc(var(--vh, 1vh) * 100);
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      background-color: var(--bg);
+      color: var(--text);
       display: flex;
       flex-direction: column;
+      height: 100vh;
+      height: calc(var(--vh, 1vh) * 100);
+      overflow: hidden;
     }
 
     header {
-      padding: 1rem;
-      background: var(--card-bg);
-      border-bottom: 1px solid #E2E8F0;
-      text-align: center;
-    }
-
-    .controls-bar {
-      display: flex;
-      gap: 0.5rem;
-      justify-content: center;
-      align-items: center;
-      padding: 0.75rem;
-      background: var(--card-bg);
-      border-bottom: 1px solid #E2E8F0;
-    }
-
-    select, button {
-      padding: 0.75rem 1rem;
-      font-size: 1rem;
-      border-radius: 8px;
-      border: 1px solid #CBD5E0;
-      background: white;
-      cursor: pointer;
-      min-height: 48px; /* Touch target optimization */
-    }
-
-    button {
-      background-color: var(--secondary-color);
+      background-color: var(--primary);
       color: white;
-      border: none;
+      padding: 0.75rem 1rem;
+      text-align: center;
+      flex-shrink: 0;
+    }
+
+    header h1 {
+      font-size: 1.2rem;
       font-weight: 600;
     }
 
-    button:disabled {
-      background-color: #A0AEC0;
-      cursor: not-allowed;
+    .controls-bar {
+      background-color: #EDF2F7;
+      padding: 0.5rem 1rem;
+      display: flex;
+      justify-content: center;
+      border-bottom: 1px solid #E2E8F0;
+      flex-shrink: 0;
+    }
+
+    select {
+      width: 100%;
+      max-width: 400px;
+      padding: 0.6rem;
+      font-size: 1rem;
+      border-radius: 6px;
+      border: 1px solid #CBD5E0;
+      background-color: white;
+      color: var(--text);
     }
 
     main {
       flex: 1;
+      overflow-y: auto;
       padding: 1rem;
-      max-width: 800px;
-      margin: 0 auto;
-      width: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
     }
 
-    .stop-card {
+    .card {
       background: var(--card-bg);
       border-radius: 12px;
-      overflow: hidden;
       box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+      width: 100%;
+      max-width: 600px;
+      overflow: hidden;
+      display: flex;
+      flex-direction: flex-col;
+      flex-direction: column;
       margin-bottom: 1rem;
     }
 
     .image-container {
       width: 100%;
-      height: 300px;
+      height: 220px;
       background-color: #E2E8F0;
       position: relative;
     }
 
-    .stop-image {
+    .image-container img {
       width: 100%;
       height: 100%;
       object-fit: cover;
       display: block;
     }
 
-    .card-body {
+    .card-content {
       padding: 1.25rem;
     }
 
+    .card-title {
+      font-size: 1.3rem;
+      color: var(--primary);
+      margin-bottom: 0.5rem;
+    }
+
+    .card-text {
+      font-size: 0.95rem;
+      line-height: 1.5;
+      color: #4A5568;
+      margin-bottom: 1rem;
+    }
+
+    .map-link {
+      display: inline-block;
+      color: var(--accent);
+      text-decoration: none;
+      font-weight: 600;
+      font-size: 0.9rem;
+    }
+
     .nav-footer {
-      position: sticky;
-      bottom: 0;
-      background: var(--card-bg);
-      padding: 1rem;
+      background: white;
       border-top: 1px solid #E2E8F0;
+      padding: 0.75rem 1rem;
       display: flex;
       justify-content: space-between;
       align-items: center;
-      gap: 1rem;
+      flex-shrink: 0;
     }
 
-    .progress-text {
+    .nav-btn {
+      background-color: var(--accent);
+      color: white;
+      border: none;
+      padding: 0.8rem 1.5rem;
+      font-size: 1rem;
       font-weight: 600;
-      color: #4A5568;
+      border-radius: 8px;
+      min-height: 48px;
+      min-width: 100px;
+      cursor: pointer;
+    }
+
+    .nav-btn:disabled {
+      background-color: #CBD5E0;
+      cursor: not-allowed;
+    }
+
+    .progress {
+      font-size: 0.95rem;
+      font-weight: 600;
+      color: #718096;
     }
   </style>
 </head>
 <body>
 
   <header>
-    <h1>Vacation Tour</h1>
+    <h1>Munich Walking Tour</h1>
   </header>
 
   <div class="controls-bar">
-    <select id="stopDropdown" onchange="jumpToStop(this.value)">
-      <option value="0">Stop 1</option>
-    </select>
+    <select id="stopSelect" onchange="jumpToStop(parseInt(this.value))"></select>
   </div>
 
   <main>
-    <article class="stop-card">
+    <div class="card">
       <div class="image-container">
-        <!-- Path updated to relative; includes inline SVG fallback logic -->
-        <img 
-          id="currentImage"
-          src="images/stop1.jpg" 
-          alt="Vacation Stop Image" 
-          class="stop-image"
-          loading="lazy"
-          onerror="handleImageError(this)"
-        >
+        <img id="stopImage" src="" alt="Stop Image" onerror="handleImageError(this)">
       </div>
-      <div class="card-body">
-        <h2 id="stopTitle">Destination</h2>
-        <p id="stopDescription">Description text goes here.</p>
+      <div class="card-content">
+        <h2 id="stopTitle" class="card-title"></h2>
+        <p id="stopDescription" class="card-text"></p>
+        <a id="mapLink" class="map-link" href="#" target="_blank" rel="noopener">Open in Google Maps &rarr;</a>
       </div>
-    </article>
+    </div>
   </main>
 
   <footer class="nav-footer">
-    <button id="prevBtn" onclick="navigate(-1)">Previous</button>
-    <span id="progressIndicator" class="progress-text">1 / 1</span>
-    <button id="nextBtn" onclick="navigate(1)">Next</button>
+    <button id="prevBtn" class="nav-btn" onclick="navigate(-1)">Previous</button>
+    <span id="progressIndicator" class="progress">1 / 17</span>
+    <button id="nextBtn" class="nav-btn" onclick="navigate(1)">Next</button>
   </footer>
 
   <script>
-    // Adjust height for mobile viewport browser bars
+    const stops = [
+      {
+        title: "1. Marienplatz",
+        desc: "The central square in the city center since 1158, dominated by the New Town Hall (Neues Rathaus).",
+        image: "images/marienplatz.jpg",
+        map: "https://maps.google.com/?q=Marienplatz+Munich"
+      },
+      {
+        title: "2. Frauenkirche",
+        desc: "The Cathedral of Our Dear Lady, a landmark church with twin 99-meter towers dominating the Munich skyline.",
+        image: "images/frauenkirche.jpg",
+        map: "https://maps.google.com/?q=Frauenkirche+Munich"
+      },
+      {
+        title: "3. Odeonsplatz",
+        desc: "A large square developed in the early 19th century, site of the Feldherrnhalle and the 1923 Beer Hall Putsch collision.",
+        image: "images/odeonsplatz.jpg",
+        map: "https://maps.google.com/?q=Odeonsplatz+Munich"
+      },
+      {
+        title: "4. Feldherrnhalle",
+        desc: "A monumental loggia on Odeonsplatz built to honor the Bavarian army.",
+        image: "images/feldherrnhalle.jpg",
+        map: "https://maps.google.com/?q=Feldherrnhalle+Munich"
+      },
+      {
+        title: "5. Viscardigasse (Drückebergergasse)",
+        desc: "Alley behind the Feldherrnhalle used by locals to bypass giving the mandatory Nazi salute during WWII.",
+        image: "images/viscardigasse.jpg",
+        map: "https://maps.google.com/?q=Viscardigasse+Munich"
+      },
+      {
+        title: "6. Munich Residenz",
+        desc: "Former royal palace of the Wittelsbach monarchs of Bavaria, the largest city palace in Germany.",
+        image: "images/residenz.jpg",
+        map: "https://maps.google.com/?q=Munich+Residenz"
+      },
+      {
+        title: "7. Hofgarten",
+        desc: "A Renaissance garden built in the early 17th century, located opposite the Residenz.",
+        image: "images/hofgarten.jpg",
+        map: "https://maps.google.com/?q=Hofgarten+Munich"
+      },
+      {
+        title: "8. Hofbräuhaus",
+        desc: "Historic 16th-century beer hall where early political gatherings took place.",
+        image: "images/hofbrauhaus.jpg",
+        map: "https://maps.google.com/?q=Hofbrauhaus+Munich"
+      },
+      {
+        title: "9. Viktualienmarkt",
+        desc: "A daily open-air food market and square in the center of Munich.",
+        image: "images/viktualienmarkt.jpg",
+        map: "https://maps.google.com/?q=Viktualienmarkt+Munich"
+      },
+      {
+        title: "10. St. Peter's Church (Alter Peter)",
+        desc: "Munich's oldest parish church, offering panoramic views of the city from its tower.",
+        image: "images/alter_peter.jpg",
+        map: "https://maps.google.com/?q=St.+Peter's+Church+Munich"
+      },
+      {
+        title: "11. Karlsplatz (Stachus)",
+        desc: "A prominent town square marked by the historic Karlstor gatehouse.",
+        image: "images/karlsplatz.jpg",
+        map: "https://maps.google.com/?q=Karlsplatz+Munich"
+      },
+      {
+        title: "12. Königsplatz",
+        desc: "A neoclassical square used for mass rallies during the National Socialist era.",
+        image: "images/koenigsplatz.jpg",
+        map: "https://maps.google.com/?q=Koenigsplatz+Munich"
+      },
+      {
+        title: "13. NS Documentation Center",
+        desc: "Museum focusing on the history and consequences of the National Socialist regime in Munich.",
+        image: "images/ns_doc.jpg",
+        map: "https://maps.google.com/?q=NS+Documentation+Center+Munich"
+      },
+      {
+        title: "14. Führerbau",
+        desc: "The historic building where the 1938 Munich Agreement was signed, now a music school.",
+        image: "images/fuehrerbau.jpg",
+        map: "https://maps.google.com/?q=Fuehrerbau+Munich"
+      },
+      {
+        title: "15. White Rose Memorial (Geschwister-Scholl-Platz)",
+        desc: "Memorial in front of LMU honoring the anti-Nazi resistance group, featuring bronze flyers embedded in the pavement.",
+        image: "images/white_rose.jpg",
+        map: "https://maps.google.com/?q=Geschwister-Scholl-Platz+Munich"
+      },
+      {
+        title: "16. Georg Elser Memorial",
+        desc: "Light sculpture memorial honoring Georg Elser, who attempted to assassinate Hitler in 1939.",
+        image: "images/georg_elser.jpg",
+        map: "https://maps.google.com/?q=Georg+Elser+Memorial+Munich"
+      },
+      {
+        title: "17. Englischer Garten & Eisbachwelle",
+        desc: "Large urban park featuring a continuous standing wave on the Eisbach river popular with surfers.",
+        image: "images/eisbachwelle.jpg",
+        map: "https://maps.google.com/?q=Eisbachwelle+Munich"
+      }
+    ];
+
+    let currentStop = 0;
+
     function setViewportHeight() {
       let vh = window.innerHeight * 0.01;
       document.documentElement.style.setProperty('--vh', `${vh}px`);
@@ -168,30 +304,63 @@
     window.addEventListener('resize', setViewportHeight);
     setViewportHeight();
 
-    // Fallback handler: ensures an image element never displays as broken
+    function initTour() {
+      const select = document.getElementById('stopSelect');
+      stops.forEach((stop, idx) => {
+        const option = document.createElement('option');
+        option.value = idx;
+        option.textContent = stop.title;
+        select.appendChild(option);
+      });
+      renderStop();
+    }
+
+    function renderStop() {
+      const stop = stops[currentStop];
+      document.getElementById('stopTitle').innerText = stop.title;
+      document.getElementById('stopDescription').innerText = stop.desc;
+      
+      const imgElement = document.getElementById('stopImage');
+      imgElement.src = stop.image;
+      imgElement.alt = stop.title;
+
+      document.getElementById('mapLink').href = stop.map;
+      document.getElementById('stopSelect').value = currentStop;
+      document.getElementById('progressIndicator').innerText = `${currentStop + 1} / ${stops.length}`;
+
+      document.getElementById('prevBtn').disabled = currentStop === 0;
+      document.getElementById('nextBtn').disabled = currentStop === stops.length - 1;
+    }
+
+    function navigate(direction) {
+      currentStop += direction;
+      if (currentStop < 0) currentStop = 0;
+      if (currentStop >= stops.length) currentStop = stops.length - 1;
+      renderStop();
+    }
+
+    function jumpToStop(index) {
+      currentStop = index;
+      renderStop();
+    }
+
     function handleImageError(img) {
-      img.onerror = null; // Prevents infinite loop
-      const title = document.getElementById('stopTitle')?.innerText || 'Image';
-      const svgFallback = `
+      img.onerror = null;
+      const title = stops[currentStop]?.title || 'Location';
+      const svg = `
         <svg xmlns="http://www.w3.org/2000/svg" width="600" height="400" viewBox="0 0 600 400">
           <rect width="100%" height="100%" fill="#EDF2F7"/>
           <path d="M260 170 L300 130 L340 170 L380 120 L440 200 L160 200 Z" fill="#CBD5E0"/>
           <circle cx="230" cy="130" r="20" fill="#CBD5E0"/>
-          <text x="50%" y="75%" dominant-baseline="middle" text-anchor="middle" font-family="sans-serif" font-size="18" fill="#718096">
-            ${title} (Image Loading)
+          <text x="50%" y="75%" dominant-baseline="middle" text-anchor="middle" font-family="sans-serif" font-size="16" fill="#718096">
+            ${title} (Image Unavailable)
           </text>
         </svg>
       `;
-      img.src = 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(svgFallback);
+      img.src = 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(svg);
     }
 
-    function jumpToStop(index) {
-      // Custom jump logic
-    }
-
-    function navigate(direction) {
-      // Custom navigation logic
-    }
+    window.onload = initTour;
   </script>
 </body>
 </html>
